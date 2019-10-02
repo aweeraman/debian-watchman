@@ -1,0 +1,5 @@
+watchman (4.9.0-1) unstable; urgency=low
+
+  * Initial release. Closes: #740691
+
+ -- Anuradha Weeraman <aweeraman@gmail.com>  Wed, 02 Oct 2019 11:24:37 -0400

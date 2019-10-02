@@ -1,0 +1,407 @@
+Description: Man pages for CLIs
+Author: Anuradha Weeraman <aweeraman@gmail.com>
+Origin: other
+Last-Update: 2019-10-09
+
+--- /dev/null
++++ watchman-4.9.0/python/docs/watchman-make.1
+@@ -0,0 +1,92 @@
++.TH watchman-make 1 "8 Oct 2019" "Linux" "watchman-make"
++
++.SH NAME
++
++watchman-make \- automatically invoke a build tool or script in response
++to files changing.
++
++.SH SYNOPSIS
++
++.B watchman-make
++.RB "[ \-h ] [ \-t TARGET [TARGET ...]] [\-s SETTLE] [\-\-make MAKE]"
++.br
++.RB "         [ \-p PATTERN [PATTERN ...]] [\-\-root ROOT] [\-r RUN]"
++.br
++
++.SH DESCRIPTION
++
++.B watchman-make
++waits for changes to files and then invokes a build tool (by default,
++`make`) or provided script to process those changes.  It uses the watchman
++service to efficiently watch the appropriate files.
++
++Events are consolidated and settled before they are dispatched to your
++build tool, so that it won't start executing until after the files have
++stopped changing.
++
++You can tell watchman-make about one or more build targets and
++dependencies for those targets or provide a script to run.  watchman-make
++will then trigger the build for the given targets or run the provided
++script as changes are detected.
++
++.SH USAGE
++
++.B OPTIONAL ARGUMENTS
++
++.B -h, --help
++.IP
++\fCShow this help\fP
++.LP
++
++.B -h, --help
++.IP
++\fCshow this help message and exit\fP
++.LP
++
++.B -t TARGET [TARGET ...], --target TARGET [TARGET ...]
++.IP
++\fCSpecify a list of target(s) to pass to the make tool.  The --make and
++--pattern options that precede --target are used to define the trigger
++condition.\fP
++.LP
++
++.B -s SETTLE, --settle SETTLE
++.IP
++\fCHow long to wait to allow changes to settle before invoking targets\fP
++.LP
++
++.B --make MAKE
++.IP
++\fCThe name of the make tool to use for the next --target. The default
++is `make`. You may include additional arguments; you are not limited to
++just the path to a tool or script.\fP
++.LP
++
++.B -p PATTERN [PATTERN ...], --pattern PATTERN [PATTERN ...]
++.IP
++\fCDefine filename matching patterns that will be used to trigger
++the next --target definition. The pattern syntax is wildmatch style;
++globbing with recursive matching via '**'. --pattern is reset to empty
++after each --target argument.\fP
++.LP
++
++.B --root ROOT
++.IP
++\fCDefine the root of the project. The default is to use the PWD. All
++patterns are considered to be relative to this root, and the build tool
++is executed with this location set as its PWD.\fP
++.LP
++
++.B -r RUN, --run
++.IP
++\fCRUN The script that should be run when changes are detected\fP
++.LP
++
++.SH SEE ALSO
++
++watchman(1), watchman-wait(1)
++
++For more information, please refer
++.UR http://facebook.github.io/watchman/docs/cli-options.html
++the online documentation
++.UE
+--- /dev/null
++++ watchman-4.9.0/python/docs/watchman-wait.1
+@@ -0,0 +1,125 @@
++.TH watchman-wait 1 "8 Oct 2019" "Linux" "watchman-wait"
++
++.SH NAME
++
++watchman-wait \- waits for changes to files.
++
++.SH SYNOPSIS
++
++.B watchman
++.RB "[\-h] [\-\-relative RELATIVE] [\-\-fields FIELDS]"
++.br
++.RB "[\-s SEPARATOR] [\-m MAX_EVENTS] [\-p PATTERN [PATTERN ...]]"
++.br
++.RB "[\-t TIMEOUT]"
++.br
++.RB "path [path ...]"
++.br
++
++.SH DESCRIPTION
++
++.B watchman-wait
++uses the watchman service to efficiently and recursively watch your
++specified list of paths.
++
++It is suitable for waiting for changes to files from shell scripts.
++
++It can stop after a configurable number of events are observed.
++The default is a single event.  You may also remove the limit and allow
++it to execute continuously.
++
++watchman-wait will print one event per line.  The event information
++includes your specified list of fields, with each field separated by a
++space (or your choice of --separator).
++
++Events are consolidated and settled by the watchman server before they
++are dispatched to watchman-wait.
++
++.SH USAGE
++
++.B OPTIONAL ARGUMENTS
++
++.B -h, --help
++.IP
++\fCshow this help message and exit\fP
++.LP
++
++.B --relative RELATIVE
++.IP
++\fCprint paths relative to this dir (default=PWD)\fP
++.LP
++
++.B --fields FIELDS
++.IP
++\fCComma separated list of file information fields to
++return. The default is just the name. For a list of
++possible fields, see: https://facebook.github.io/watch
++man/docs/cmd/query.html#available-fields\fP
++.LP
++
++.B -s SEPARATOR, --separator SEPARATOR
++.IP
++\fCString to use as field separator for event output.\fP
++.LP
++
++.B -m MAX_EVENTS, --max-events MAX_EVENTS
++.IP
++\fCSet the maximum number of events that will be processed. When the limit
++is reached, watchman-wait will exit. The default is 1. Setting the limit
++to 0 removes the limit, causing watchman-wait to execute indefinitely.\fP
++.LP
++
++.B -p PATTERN [PATTERN ...], --pattern PATTERN [PATTERN ...]
++.IP
++\fCOnly emit paths that match this list of patterns. Patterns are
++applied by the watchman server and are matched against the root-relative
++paths. You will almost certainly want to use quotes around your pattern
++list so that your shell doesn't interpret the pattern. The pattern syntax
++is wildmatch style; globbing with recursive matching via '**'.\fP
++.LP
++
++.B -t TIMEOUT, --timeout TIMEOUT
++.IP
++\fCExit if no events trigger within the specified timeout. If timeout
++is zero (the default) then keep running indefinitely.  \fP
++.LP
++
++.B POSITIONAL ARGUMENTS
++
++.B path
++.IP
++\fCpath(s) to watch\fP
++.LP
++
++.B EXIT STATUS
++
++.B 0
++.IP
++\fCAfter successfully waiting for event(s)\fP
++.LP
++
++.B 1
++.IP
++\fCIn case of a runtime error of some kind\fP
++.LP
++
++.B 2
++.IP
++\fCThe -t/--timeout option was used and that amount of time passed before
++an event was received\fP
++.LP
++
++.B 3
++.IP
++\fCExecution was interrupted (Ctrl-C)\fP
++.LP
++
++
++.SH SEE ALSO
++
++watchman(1), watchman-make(1)
++
++For more information, please refer
++.UR http://facebook.github.io/watchman/docs/cli-options.html
++the online documentation
++.UE
+--- /dev/null
++++ watchman-4.9.0/watchman.1
+@@ -0,0 +1,176 @@
++.TH watchman 1 "8 Oct 2019" "Linux" "watchman"
++
++.SH NAME
++
++watchman \- a file watching service
++
++.SH SYNOPSIS
++
++.B watchman
++.RB "[\-\-OPTION ...]"
++.RB COMMAND
++
++.SH DESCRIPTION
++
++.B watchman
++can recursively watch one or more directory trees (also referred
++to as roots).  Watchman does not follow symlinks; it knows they exist, but
++they show up the same as any other file in its reporting and it will wait
++for a root to settle down before it will start to trigger notifications
++or command execution. Watchman is conservative, preferring to err on the
++side of caution; it considers files to be freshly changed when you start
++to watch them or when it is unsure. You can query a root for file changes
++since you last checked, or the current state of the tree. Watchman allows
++you to subscribe to file changes that occur in a root.
++
++.SH USAGE
++
++The following example establishes a watch on a source directory and then
++sets up a trigger named buildme that will run a tool named minify-css
++whenever a CSS file is changed. The tool will be passed a list of the
++changed filenames.
++
++.IP
++\fCwatchman watch ~/src\fP
++.LP
++the single quotes around '*.css' are important:
++.IP
++\fCwatchman -- trigger ~/src buildme '*.css' -- minify-css\fP
++.LP
++
++The output for buildme will land in the Watchman log file unless you
++send it somewhere else.  To use
++
++.B OPTIONS
++
++.B -h, --help
++.IP
++\fCShow this help\fP
++.LP
++
++.B --inetd
++.IP
++\fCSpawning from an inetd style supervisor\fP
++.LP
++
++.B -v, --version
++.IP
++\fCShow version number\fP
++.LP
++
++.B -U, --sockname=PATH
++.IP
++\fCSpecify alternate sockname\fP
++.LP
++
++.B -o, --logfile=PATH
++.IP
++\fCSpecify path to logfile\fP
++.LP
++
++.B --log-level
++.IP
++\fCset the log level (0 = off, default is 1, verbose = 2)\fP
++.LP
++
++.B --pidfile=PATH
++.IP
++\fCSpecify path to pidfile\fP
++.LP
++
++.B -p, --persistent
++.IP
++\fCPersist and wait for further responses\fP
++.LP
++
++.B -n, --no-save-state
++.IP
++\fCDon't save state between invocations\fP
++.LP
++
++.B --statefile=PATH
++.IP
++\fCSpecify path to file to hold watch and trigger state\fP
++.LP
++
++.B -j, --json-command
++.IP
++\fCInstead of parsing CLI arguments, take a single json object from stdin\fP
++.LP
++
++.B --output-encoding=ARG
++.IP
++\fCCLI output encoding. json (default) or bser\fP
++.LP
++
++.B --server-encoding=ARG
++.IP
++\fCCLI<->server encoding. bser (default) or json\fP
++.LP
++
++.B -f, --foreground
++.IP
++\fCRun the service in the foreground\fP
++.LP
++
++.B --no-pretty
++.IP
++\fCDon't pretty print JSON\fP
++.LP
++
++.B --no-spawn
++.IP
++\fCDon't try to start the service if it is not available\fP
++.LP
++
++.B --no-local
++.IP
++\fCWhen no-spawn is enabled, don't try to handle request in client mode
++if service is unavailable\fP
++.LP
++
++
++.B AVAILABLE COMMANDS
++
++      clock
++      debug-ageout
++      debug-contenthash
++      debug-drop-privs
++      debug-get-subscriptions
++      debug-poison
++      debug-recrawl
++      debug-set-subscriptions-paused
++      debug-show-cursors
++      find
++      flush-subscriptions
++      get-config
++      get-pid
++      get-sockname
++      list-capabilities
++      log
++      log-level
++      query
++      shutdown-server
++      since
++      state-enter
++      state-leave
++      subscribe
++      trigger
++      trigger-del
++      trigger-list
++      unsubscribe
++      version
++      watch
++      watch-del
++      watch-del-all
++      watch-list
++      watch-project
++
++.SH SEE ALSO
++
++watchman-wait(1), watchman-make(1)
++
++For more information, please refer
++.UR http://facebook.github.io/watchman/docs/cli-options.html
++the online documentation
++.UE

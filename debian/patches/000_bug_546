@@ -1,0 +1,30 @@
+Description: Backported fix for a test failure
+ This is to fix a segfault due to nullptr which appeared on Alpine + musl libc
+ but also manifested in Debian during the initial packaging effort. This issue is
+ fixed upstream in the latest version which is not released at the time of writing.
+ This patch will not be required in v4.9.0+.
+Origin: upstream, https://github.com/ip4368/docker-watchman/commit/8fc47c90c34d112282debd5833e0cb20f07fe184#diff-3e8f02473d52888b44232c68b14a3d19
+Bug: https://github.com/facebook/watchman/issues/546
+Forwarded: not-needed
+Last-Update: 2019-10-04
+
+--- watchman-4.9.0.orig/thirdparty/libart/src/art-inl.h
++++ watchman-4.9.0/thirdparty/libart/src/art-inl.h
+@@ -760,7 +760,7 @@ art_tree<ValueType, KeyType>::Node::maxi
+ template <typename ValueType, typename KeyType>
+ typename art_tree<ValueType, KeyType>::Leaf*
+ art_tree<ValueType, KeyType>::minimum() const {
+-  return root_->minimum();
++  return root_ ? root_->minimum() : nullptr;
+ }
+ 
+ /**
+@@ -769,7 +769,7 @@ art_tree<ValueType, KeyType>::minimum()
+ template <typename ValueType, typename KeyType>
+ typename art_tree<ValueType, KeyType>::Leaf*
+ art_tree<ValueType, KeyType>::maximum() const {
+-  return root_->maximum();
++  return root_ ? root_->maximum() : nullptr;
+ }
+ 
+ template <typename ValueType, typename KeyType>

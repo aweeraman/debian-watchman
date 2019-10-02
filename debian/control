@@ -1,0 +1,29 @@
+Source: watchman
+Section: utils
+Priority: optional
+Maintainer: Anuradha Weeraman <aweeraman@gmail.com>
+Build-Depends:  debhelper (>=11~),
+		dh-python,
+		python3-all-dev,
+		pkg-config,
+		libpcre3-dev,
+		libssl-dev
+Standards-Version: 4.4.0
+Homepage: http://facebook.github.io/watchman
+
+Package: watchman
+Architecture: linux-any
+Suggests: python3-pywatchman
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Description: File watching service
+ Watchman exists to watch files and record when they actually change.
+ It can also trigger actions (such as rebuilding assets) when
+ matching files change. 
+
+Package: python3-pywatchman
+Architecture: linux-any
+Provides: ${python3:Provides}
+Depends: ${misc:Depends}, ${shlibs:Depends}, ${python3:Depends}, watchman
+Description: Python library for Watchman and related utilities
+ A python library for watchman (the file watching service), and related
+ utilities such as watchman-make and watchman-wait.

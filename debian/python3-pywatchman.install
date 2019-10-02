@@ -1,0 +1,3 @@
+usr/bin/watchman-make
+usr/bin/watchman-wait
+usr/lib/python3/*-packages/*
