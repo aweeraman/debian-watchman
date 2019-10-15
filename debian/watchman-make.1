@@ -1,0 +1,92 @@
+.TH watchman-make 1 "8 Oct 2019" "Linux" "watchman-make"
+
+.SH NAME
+
+watchman-make \- automatically invoke a build tool or script in response
+to files changing.
+
+.SH SYNOPSIS
+
+.B watchman-make
+.RB "[ \-h ] [ \-t TARGET [TARGET ...]] [\-s SETTLE] [\-\-make MAKE]"
+.br
+.RB "         [ \-p PATTERN [PATTERN ...]] [\-\-root ROOT] [\-r RUN]"
+.br
+
+.SH DESCRIPTION
+
+.B watchman-make
+waits for changes to files and then invokes a build tool (by default,
+`make`) or provided script to process those changes.  It uses the watchman
+service to efficiently watch the appropriate files.
+
+Events are consolidated and settled before they are dispatched to your
+build tool, so that it won't start executing until after the files have
+stopped changing.
+
+You can tell watchman-make about one or more build targets and
+dependencies for those targets or provide a script to run.  watchman-make
+will then trigger the build for the given targets or run the provided
+script as changes are detected.
+
+.SH USAGE
+
+.B OPTIONAL ARGUMENTS
+
+.B -h, --help
+.IP
+\fCShow this help\fP
+.LP
+
+.B -h, --help
+.IP
+\fCshow this help message and exit\fP
+.LP
+
+.B -t TARGET [TARGET ...], --target TARGET [TARGET ...]
+.IP
+\fCSpecify a list of target(s) to pass to the make tool.  The --make and
+--pattern options that precede --target are used to define the trigger
+condition.\fP
+.LP
+
+.B -s SETTLE, --settle SETTLE
+.IP
+\fCHow long to wait to allow changes to settle before invoking targets\fP
+.LP
+
+.B --make MAKE
+.IP
+\fCThe name of the make tool to use for the next --target. The default
+is `make`. You may include additional arguments; you are not limited to
+just the path to a tool or script.\fP
+.LP
+
+.B -p PATTERN [PATTERN ...], --pattern PATTERN [PATTERN ...]
+.IP
+\fCDefine filename matching patterns that will be used to trigger
+the next --target definition. The pattern syntax is wildmatch style;
+globbing with recursive matching via '**'. --pattern is reset to empty
+after each --target argument.\fP
+.LP
+
+.B --root ROOT
+.IP
+\fCDefine the root of the project. The default is to use the PWD. All
+patterns are considered to be relative to this root, and the build tool
+is executed with this location set as its PWD.\fP
+.LP
+
+.B -r RUN, --run
+.IP
+\fCRUN The script that should be run when changes are detected\fP
+.LP
+
+.SH SEE ALSO
+
+watchman(1), watchman-wait(1)
+
+For more information, please refer
+.UR http://facebook.github.io/watchman/docs/cli-options.html
+the online documentation
+.UE

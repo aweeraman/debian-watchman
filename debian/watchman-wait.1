@@ -1,0 +1,125 @@
+.TH watchman-wait 1 "8 Oct 2019" "Linux" "watchman-wait"
+
+.SH NAME
+
+watchman-wait \- waits for changes to files.
+
+.SH SYNOPSIS
+
+.B watchman
+.RB "[\-h] [\-\-relative RELATIVE] [\-\-fields FIELDS]"
+.br
+.RB "[\-s SEPARATOR] [\-m MAX_EVENTS] [\-p PATTERN [PATTERN ...]]"
+.br
+.RB "[\-t TIMEOUT]"
+.br
+.RB "path [path ...]"
+.br
+
+.SH DESCRIPTION
+
+.B watchman-wait
+uses the watchman service to efficiently and recursively watch your
+specified list of paths.
+
+It is suitable for waiting for changes to files from shell scripts.
+
+It can stop after a configurable number of events are observed.
+The default is a single event.  You may also remove the limit and allow
+it to execute continuously.
+
+watchman-wait will print one event per line.  The event information
+includes your specified list of fields, with each field separated by a
+space (or your choice of --separator).
+
+Events are consolidated and settled by the watchman server before they
+are dispatched to watchman-wait.
+
+.SH USAGE
+
+.B OPTIONAL ARGUMENTS
+
+.B -h, --help
+.IP
+\fCshow this help message and exit\fP
+.LP
+
+.B --relative RELATIVE
+.IP
+\fCprint paths relative to this dir (default=PWD)\fP
+.LP
+
+.B --fields FIELDS
+.IP
+\fCComma separated list of file information fields to
+return. The default is just the name. For a list of
+possible fields, see: https://facebook.github.io/watch
+man/docs/cmd/query.html#available-fields\fP
+.LP
+
+.B -s SEPARATOR, --separator SEPARATOR
+.IP
+\fCString to use as field separator for event output.\fP
+.LP
+
+.B -m MAX_EVENTS, --max-events MAX_EVENTS
+.IP
+\fCSet the maximum number of events that will be processed. When the limit
+is reached, watchman-wait will exit. The default is 1. Setting the limit
+to 0 removes the limit, causing watchman-wait to execute indefinitely.\fP
+.LP
+
+.B -p PATTERN [PATTERN ...], --pattern PATTERN [PATTERN ...]
+.IP
+\fCOnly emit paths that match this list of patterns. Patterns are
+applied by the watchman server and are matched against the root-relative
+paths. You will almost certainly want to use quotes around your pattern
+list so that your shell doesn't interpret the pattern. The pattern syntax
+is wildmatch style; globbing with recursive matching via '**'.\fP
+.LP
+
+.B -t TIMEOUT, --timeout TIMEOUT
+.IP
+\fCExit if no events trigger within the specified timeout. If timeout
+is zero (the default) then keep running indefinitely.  \fP
+.LP
+
+.B POSITIONAL ARGUMENTS
+
+.B path
+.IP
+\fCpath(s) to watch\fP
+.LP
+
+.B EXIT STATUS
+
+.B 0
+.IP
+\fCAfter successfully waiting for event(s)\fP
+.LP
+
+.B 1
+.IP
+\fCIn case of a runtime error of some kind\fP
+.LP
+
+.B 2
+.IP
+\fCThe -t/--timeout option was used and that amount of time passed before
+an event was received\fP
+.LP
+
+.B 3
+.IP
+\fCExecution was interrupted (Ctrl-C)\fP
+.LP
+
+
+.SH SEE ALSO
+
+watchman(1), watchman-make(1)
+
+For more information, please refer
+.UR http://facebook.github.io/watchman/docs/cli-options.html
+the online documentation
+.UE

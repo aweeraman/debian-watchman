@@ -1,0 +1,176 @@
+.TH watchman 1 "8 Oct 2019" "Linux" "watchman"
+
+.SH NAME
+
+watchman \- a file watching service
+
+.SH SYNOPSIS
+
+.B watchman
+.RB "[\-\-OPTION ...]"
+.RB COMMAND
+
+.SH DESCRIPTION
+
+.B watchman
+can recursively watch one or more directory trees (also referred
+to as roots).  Watchman does not follow symlinks; it knows they exist, but
+they show up the same as any other file in its reporting and it will wait
+for a root to settle down before it will start to trigger notifications
+or command execution. Watchman is conservative, preferring to err on the
+side of caution; it considers files to be freshly changed when you start
+to watch them or when it is unsure. You can query a root for file changes
+since you last checked, or the current state of the tree. Watchman allows
+you to subscribe to file changes that occur in a root.
+
+.SH USAGE
+
+The following example establishes a watch on a source directory and then
+sets up a trigger named buildme that will run a tool named minify-css
+whenever a CSS file is changed. The tool will be passed a list of the
+changed filenames.
+
+.IP
+\fCwatchman watch ~/src\fP
+.LP
+the single quotes around '*.css' are important:
+.IP
+\fCwatchman -- trigger ~/src buildme '*.css' -- minify-css\fP
+.LP
+
+The output for buildme will land in the Watchman log file unless you
+send it somewhere else.  To use
+
+.B OPTIONS
+
+.B -h, --help
+.IP
+\fCShow this help\fP
+.LP
+
+.B --inetd
+.IP
+\fCSpawning from an inetd style supervisor\fP
+.LP
+
+.B -v, --version
+.IP
+\fCShow version number\fP
+.LP
+
+.B -U, --sockname=PATH
+.IP
+\fCSpecify alternate sockname\fP
+.LP
+
+.B -o, --logfile=PATH
+.IP
+\fCSpecify path to logfile\fP
+.LP
+
+.B --log-level
+.IP
+\fCset the log level (0 = off, default is 1, verbose = 2)\fP
+.LP
+
+.B --pidfile=PATH
+.IP
+\fCSpecify path to pidfile\fP
+.LP
+
+.B -p, --persistent
+.IP
+\fCPersist and wait for further responses\fP
+.LP
+
+.B -n, --no-save-state
+.IP
+\fCDon't save state between invocations\fP
+.LP
+
+.B --statefile=PATH
+.IP
+\fCSpecify path to file to hold watch and trigger state\fP
+.LP
+
+.B -j, --json-command
+.IP
+\fCInstead of parsing CLI arguments, take a single json object from stdin\fP
+.LP
+
+.B --output-encoding=ARG
+.IP
+\fCCLI output encoding. json (default) or bser\fP
+.LP
+
+.B --server-encoding=ARG
+.IP
+\fCCLI<->server encoding. bser (default) or json\fP
+.LP
+
+.B -f, --foreground
+.IP
+\fCRun the service in the foreground\fP
+.LP
+
+.B --no-pretty
+.IP
+\fCDon't pretty print JSON\fP
+.LP
+
+.B --no-spawn
+.IP
+\fCDon't try to start the service if it is not available\fP
+.LP
+
+.B --no-local
+.IP
+\fCWhen no-spawn is enabled, don't try to handle request in client mode
+if service is unavailable\fP
+.LP
+
+
+.B AVAILABLE COMMANDS
+
+      clock
+      debug-ageout
+      debug-contenthash
+      debug-drop-privs
+      debug-get-subscriptions
+      debug-poison
+      debug-recrawl
+      debug-set-subscriptions-paused
+      debug-show-cursors
+      find
+      flush-subscriptions
+      get-config
+      get-pid
+      get-sockname
+      list-capabilities
+      log
+      log-level
+      query
+      shutdown-server
+      since
+      state-enter
+      state-leave
+      subscribe
+      trigger
+      trigger-del
+      trigger-list
+      unsubscribe
+      version
+      watch
+      watch-del
+      watch-del-all
+      watch-list
+      watch-project
+
+.SH SEE ALSO
+
+watchman-wait(1), watchman-make(1)
+
+For more information, please refer
+.UR http://facebook.github.io/watchman/docs/cli-options.html
+the online documentation
+.UE
