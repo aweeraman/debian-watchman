@@ -20,8 +20,11 @@ Suggests: python3-pywatchman
 Depends: ${misc:Depends}, ${shlibs:Depends}
 Description: File watching service
  Watchman can be used to watch files and record when they actually change.
- It can also trigger actions (such as rebuilding assets) when matching
- files change.
+ It can can be used to trigger actions (such as rebuilding assets) when
+ matching files change. If you require to perform an action based on
+ whether a file changes or not, watchman may be the tool you need. By
+ giving watchman a pattern and an action to take when the files change,
+ you can trigger an activity to be taken.
 
 Package: python3-pywatchman
 Section: python
@@ -30,4 +33,10 @@ Provides: ${python3:Provides}
 Depends: ${misc:Depends}, ${shlibs:Depends}, ${python3:Depends}, watchman
 Description: Python library for Watchman and related utilities
  A Python library for watchman (the file watching service), and related
- utilities such as watchman-make and watchman-wait.
+ utilities such as watchman-make and watchman-wait. Watchman can be used
+ to watch files and record when they actually change. It can be used
+ to trigger actions (such as rebuilding assets) when matching files
+ change. If you require to perform an action based on whether a file
+ changes or not, watchman may be the tool you need. By giving watchman
+ a pattern and an action to take when the files change, you can trigger
+ an activity to be taken.
