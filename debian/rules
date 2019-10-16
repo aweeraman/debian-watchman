@@ -27,6 +27,11 @@ override_dh_auto_install:
 		cd python && $$python setup.py install --root=$(CURDIR)/debian/tmp --install-layout=deb; \
 	done;
 
+# Remove generated files by autogen.sh too (which are usually distributed by upstream)
 override_dh_auto_clean:
 	dh_auto_clean
 	rm -rf python/pywatchman.egg-info/
+	rm -rf m4/
+	rm -f compile ltmain.sh config.guess config.sub install-sh \
+		missing depcomp test-driver
+	rm -f Makefile.in aclocal.m4 config.h.in configure
