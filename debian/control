@@ -27,5 +27,5 @@ Architecture: linux-any
 Provides: ${python3:Provides}
 Depends: ${misc:Depends}, ${shlibs:Depends}, ${python3:Depends}, watchman
 Description: Python library for Watchman and related utilities
- A python library for watchman (the file watching service), and related
+ A Python library for watchman (the file watching service), and related
  utilities such as watchman-make and watchman-wait.
