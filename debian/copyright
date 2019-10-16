@@ -16,16 +16,16 @@ Files: debian/*
 Copyright: 2019, Anuradha Weeraman <aweeraman@gmail.com>
 License: Apache-2.0
 
-Files: third_party/wildmatch/*
+Files: thirdparty/wildmatch/*
 Copyright: 1986-present, Rich $alz, Wayne Davison, and Duy Nguyen.
 License: Apache-2.0
 
-Files: test/art_test.cpp
+Files: tests/art_test.cpp
 Copyright: 2016-present, Facebook, Inc
            2012, Armon Dadgar
 License: Apache-2.0
 
-Files:	third_party/libart/*
+Files: thirdparty/libart/*
 Copyright: 2012, Armon Dadgar
 License: BSD-3-CLAUSE-1
  Redistribution and use in source and binary forms, with or without
@@ -51,8 +51,8 @@ License: BSD-3-CLAUSE-1
  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Files:	third_party/tpp.cpp
-	third_party/tap.h
+Files: thirdparty/tap.cpp
+       thirdparty/tap.h
 Copyright: 2004, Nik Clayton
 License: BSD-2-CLAUSE-1
  Redistribution and use in source and binary forms, with or without
@@ -76,7 +76,7 @@ License: BSD-2-CLAUSE-1
  OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  SUCH DAMAGE.
 
-Files:	acinclude.m4
+Files: acinclude.m4
 Copyright: 2008, Benjamin Kosnik <bkoz@redhat.com>
  2012, Zack Weinberg <zackw@panix.com>
  2013, Roy Stogner <roystgnr@ices.utexas.edu>
@@ -89,8 +89,8 @@ License: permissive
  and this notice are preserved.  This file is offered as-is, without any
  warranty.
 
-Files:	winbuild/getopt.h
-	winbuild/getopt_long.cpp
+Files: winbuild/getopt.h
+       winbuild/getopt_long.cpp
 Copyright: 1987, 1993, 1994, The Regents of the University of California
  2003-2010, PostgreSQL Global Development Group
 License: BSD-3-CLAUSE-2
@@ -118,7 +118,7 @@ License: BSD-3-CLAUSE-2
  OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  SUCH DAMAGE.
 
-Files:     thirdparty/jansson/*
+Files: thirdparty/jansson/*
 Copyright: 2009-2012, Petri Lehtinen <petri@digip.org>
  2011-2012, Basile Starynkevitch <basile@starynkevitch.net>
  2011-2012, Graeme Smecher <graeme.smecher@mail.mcgill.ca>

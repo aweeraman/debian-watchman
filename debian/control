@@ -2,27 +2,29 @@ Source: watchman
 Section: utils
 Priority: optional
 Maintainer: Anuradha Weeraman <aweeraman@gmail.com>
-Build-Depends:  debhelper (>=11~),
-		dh-python,
-		python3-all-dev,
-		pkg-config,
-		libpcre3-dev,
-		libssl-dev
+Build-Depends: debhelper (>=12~),
+               dh-python,
+               python3-all-dev,
+               pkg-config,
+               libpcre3-dev,
+               libssl-dev
 Standards-Version: 4.4.0
 Vcs-Browser: https://salsa.debian.org/debian/watchman
 Vcs-Git: https://salsa.debian.org/debian/watchman.git
 Homepage: http://facebook.github.io/watchman
 
 Package: watchman
+Section: utils
 Architecture: linux-any
 Suggests: python3-pywatchman
 Depends: ${misc:Depends}, ${shlibs:Depends}
 Description: File watching service
- Watchman exists to watch files and record when they actually change.
- It can also trigger actions (such as rebuilding assets) when
- matching files change. 
+ Watchman can be used to watch files and record when they actually change.
+ It can also trigger actions (such as rebuilding assets) when matching
+ files change.
 
 Package: python3-pywatchman
+Section: python
 Architecture: linux-any
 Provides: ${python3:Provides}
 Depends: ${misc:Depends}, ${shlibs:Depends}, ${python3:Depends}, watchman
