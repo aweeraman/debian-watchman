@@ -13,6 +13,7 @@ Standards-Version: 4.4.0
 Vcs-Browser: https://salsa.debian.org/debian/watchman
 Vcs-Git: https://salsa.debian.org/debian/watchman.git
 Homepage: http://facebook.github.io/watchman
+Rules-Requires-Root: no
 
 Package: watchman
 Architecture: linux-any
@@ -20,7 +21,7 @@ Suggests: python3-pywatchman
 Depends: ${misc:Depends}, ${shlibs:Depends}
 Description: File watching service
  Watchman can be used to watch files and record when they actually change.
- It can can be used to trigger actions (such as rebuilding assets) when
+ It can be used to trigger actions (such as rebuilding assets) when
  matching files change. If you require to perform an action based on
  whether a file changes or not, watchman may be the tool you need. By
  giving watchman a pattern and an action to take when the files change,
