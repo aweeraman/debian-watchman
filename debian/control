@@ -3,6 +3,7 @@ Section: utils
 Priority: optional
 Maintainer: Anuradha Weeraman <aweeraman@gmail.com>
 Build-Depends: debhelper (>=12~),
+               debhelper-compat (=12),
                dh-python,
                python3-all-dev,
                pkg-config,
