@@ -1,3 +1,9 @@
+watchman (4.9.0-2) unstable; urgency=low
+
+  * Bumped up standards version 
+
+ -- Anuradha Weeraman <aweeraman@gmail.com>  Mon, 11 Nov 2019 16:02:18 -0500
+
 watchman (4.9.0-1) unstable; urgency=low
 
   * Initial release. Closes: #740691
