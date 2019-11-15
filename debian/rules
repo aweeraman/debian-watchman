@@ -5,6 +5,7 @@ export PYBUILD_NAME=pywatchman
 export PYBUILD_SYSTEM=distutils
 export PYBUILD_VERSIONS=3
 export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+export PY3VERSIONS = $(shell py3versions -r)
 
 %:
 	dh $@ --with python3
@@ -17,14 +18,14 @@ override_dh_auto_configure:
 
 override_dh_auto_build:
 	dh_auto_build
-	set -ex; for python in $(shell py3versions -r); do \
-		cd python && $$python setup.py build; \
+	set -ex; for python in $(PY3VERSIONS); do \
+		cd python && $$python setup.py build && cd ..; \
 	done;
 
 override_dh_auto_install:
 	dh_auto_install
-	set -ex; for python in $(shell py3versions -r); do \
-		cd python && $$python setup.py install --root=$(CURDIR)/debian/tmp --install-layout=deb; \
+	set -ex; for python in $(PY3VERSIONS); do \
+		cd python && $$python setup.py install --root=$(CURDIR)/debian/tmp --install-layout=deb && cd ..; \
 	done;
 
 # Remove generated files by autogen.sh too (which are usually distributed by upstream)
