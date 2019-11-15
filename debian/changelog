@@ -1,6 +1,7 @@
 watchman (4.9.0-2) unstable; urgency=low
 
   * Bumped up standards version 
+  * Build python modules for all supported python3 versions
 
  -- Anuradha Weeraman <aweeraman@gmail.com>  Mon, 11 Nov 2019 16:02:18 -0500
 
