@@ -1,3 +1,9 @@
+watchman (4.9.0-3) unstable; urgency=medium
+
+  * Respect TMPDIR for state (Closes: #946544)
+
+ -- Anuradha Weeraman <aweeraman@gmail.com>  Tue, 31 Dec 2019 17:12:19 -0500
+
 watchman (4.9.0-2) unstable; urgency=low
 
   * Bumped up standards version 

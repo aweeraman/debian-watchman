@@ -14,7 +14,7 @@ override_dh_autoreconf:
 	dh_autoreconf -- ./autogen.sh
 
 override_dh_auto_configure:
-	dh_auto_configure -- --enable-statedir=/tmp --enable-lenient --with-pcre=/usr/bin/pcre-config
+	dh_auto_configure -- --disable-statedir --enable-lenient --with-pcre=/usr/bin/pcre-config
 
 override_dh_auto_build:
 	dh_auto_build
