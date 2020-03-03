@@ -5,7 +5,7 @@ Maintainer: Anuradha Weeraman <aweeraman@gmail.com>
 Build-Depends: debhelper (>=12~),
                debhelper-compat (=12),
                dh-python,
-               python3-all-dev,
+               python3-all-dev (<<3.9),
                pkg-config,
                libpcre3-dev,
                libssl-dev
