@@ -1,4 +1,4 @@
-watchman (4.9.0-4) UNRELEASED; urgency=medium
+watchman (4.9.0-4) unstable; urgency=medium
 
   * Bumped up standards version
   * Included upstream metadata
