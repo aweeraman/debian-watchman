@@ -1,6 +1,8 @@
 watchman (4.9.0-5) UNRELEASED; urgency=low
 
   * Use secure URI in Homepage field.
+  * Remove obsolete field Name from debian/upstream/metadata (already present in
+    machine-readable debian/copyright).
 
  -- Debian Janitor <janitor@jelmer.uk>  Tue, 25 Aug 2020 14:50:41 -0000
 
