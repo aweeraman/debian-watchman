@@ -2,8 +2,6 @@
   "Archive": "GitHub",
   "Bug-Database": "https://github.com/facebook/watchman/issues",
   "Bug-Submit": "https://github.com/facebook/watchman/issues/new",
-  "Name": "Watchman",
   "Repository": "https://github.com/facebook/watchman.git",
   "Repository-Browse": "https://github.com/facebook/watchman"
 }
-
