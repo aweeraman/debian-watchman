@@ -1,4 +1,4 @@
-watchman (4.9.0-5) UNRELEASED; urgency=low
+watchman (4.9.0-5) unstable; urgency=high
 
   [ Debian Janitor ]
   * Use secure URI in Homepage field.
@@ -6,7 +6,8 @@ watchman (4.9.0-5) UNRELEASED; urgency=low
     machine-readable debian/copyright).
 
   [ Anuradha Weeraman ]
-  * Resolve FTBFS due to version constraint on python3-all-dev
+  * Resolve FTBFS due to version constraint on python3-all-dev (Closes: #975746)
+  * Bumped up standards version
 
  -- Anuradha Weeraman <anuradha@debian.org>  Wed, 25 Nov 2020 19:03:07 -0500
 
