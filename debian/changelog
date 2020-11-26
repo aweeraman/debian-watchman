@@ -1,10 +1,14 @@
 watchman (4.9.0-5) UNRELEASED; urgency=low
 
+  [ Debian Janitor ]
   * Use secure URI in Homepage field.
   * Remove obsolete field Name from debian/upstream/metadata (already present in
     machine-readable debian/copyright).
 
- -- Debian Janitor <janitor@jelmer.uk>  Tue, 25 Aug 2020 14:50:41 -0000
+  [ Anuradha Weeraman ]
+  * Resolve FTBFS due to version constraint on python3-all-dev
+
+ -- Anuradha Weeraman <anuradha@debian.org>  Wed, 25 Nov 2020 19:03:07 -0500
 
 watchman (4.9.0-4) unstable; urgency=medium
 
