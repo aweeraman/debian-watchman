@@ -1,6 +1,7 @@
 watchman (4.9.0-6) unstable; urgency=high
 
   * Fix FTBFS with autoconf 2.71 (Closes: #978921)
+  * Bumped up Standards Version to 4.6.0
 
  -- Anuradha Weeraman <anuradha@debian.org>  Tue, 24 Aug 2021 20:15:54 +0530
 
