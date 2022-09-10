@@ -4,7 +4,7 @@ export PYTHON=python3
 export PYBUILD_NAME=pywatchman
 export PYBUILD_SYSTEM=distutils
 export PYBUILD_VERSIONS=3
-export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all reproducible=+all
 export PY3VERSIONS = $(shell py3versions -r)
 
 %:
