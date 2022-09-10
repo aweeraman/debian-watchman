@@ -1,3 +1,4 @@
 000_bug_546
 001_python_3_support
 002_disable_autoconf_warnings
+003_support_python_310
