@@ -1,6 +1,9 @@
 watchman (4.9.0-7) unstable; urgency=medium
 
   * Bumped up standards version. 
+  * Fix issue with Python 3.10, patch by Frederic Peters (Closes: #1008964)
+  * Removed unnecessary lintian overrides
+  * Orphaning package and setting maintainer to Debian QA
 
  -- Anuradha Weeraman <anuradha@debian.org>  Sat, 10 Sep 2022 16:25:54 +0530
 
