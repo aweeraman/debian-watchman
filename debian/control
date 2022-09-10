@@ -9,7 +9,7 @@ Build-Depends: debhelper (>=12~),
                pkg-config,
                libpcre3-dev,
                libssl-dev
-Standards-Version: 4.6.0
+Standards-Version: 4.6.1
 Vcs-Browser: https://salsa.debian.org/debian/watchman
 Vcs-Git: https://salsa.debian.org/debian/watchman.git
 Homepage: https://facebook.github.io/watchman
