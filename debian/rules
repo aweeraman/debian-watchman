@@ -8,7 +8,7 @@ export DEB_BUILD_MAINT_OPTIONS = hardening=+all reproducible=+all
 export PY3VERSIONS = $(shell py3versions -r)
 
 %:
-	dh $@ --with python3
+	dh $@
 
 override_dh_autoreconf:
 	dh_autoreconf -- ./autogen.sh
@@ -16,21 +16,18 @@ override_dh_autoreconf:
 override_dh_auto_configure:
 	dh_auto_configure -- --disable-statedir --enable-lenient --with-pcre=/usr/bin/pcre-config
 
-override_dh_auto_build:
-	dh_auto_build
+execute_after_dh_auto_build:
 	set -ex; for python in $(PY3VERSIONS); do \
 		cd python && $$python setup.py build && cd ..; \
 	done;
 
-override_dh_auto_install:
-	dh_auto_install
+execute_after_dh_auto_install:
 	set -ex; for python in $(PY3VERSIONS); do \
 		cd python && $$python setup.py install --root=$(CURDIR)/debian/tmp --install-layout=deb && cd ..; \
 	done;
 
 # Remove generated files by autogen.sh too (which are usually distributed by upstream)
-override_dh_auto_clean:
-	dh_auto_clean
+execute_after_dh_auto_clean:
 	rm -rf python/pywatchman.egg-info/
 	rm -rf m4/
 	rm -f compile ltmain.sh config.guess config.sub install-sh \

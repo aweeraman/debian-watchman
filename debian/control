@@ -4,9 +4,9 @@ Priority: optional
 Maintainer: Debian QA Group <packages@qa.debian.org>
 Build-Depends: debhelper (>=12~),
                debhelper-compat (=12),
-               dh-python,
+               dh-sequence-python3,
                python3-all-dev,
-               pkg-config,
+               pkgconf,
                libpcre3-dev,
                libssl-dev
 Standards-Version: 4.6.1
