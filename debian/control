@@ -6,6 +6,7 @@ Build-Depends: debhelper (>=12~),
                debhelper-compat (=12),
                dh-sequence-python3,
                python3-all-dev,
+               python3-setuptools,
                pkgconf,
                libpcre3-dev,
                libssl-dev
