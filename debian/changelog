@@ -1,3 +1,11 @@
+watchman (4.9.0-8) unstable; urgency=medium
+
+  * QA Upload
+  * Use dh-sequence-python3
+  * Add build-dep on python3-setuptools (Closes: #1080829)
+
+ -- Alexandre Detiste <tchet@debian.org>  Sun, 19 Jan 2025 21:23:12 +0100
+
 watchman (4.9.0-7) unstable; urgency=medium
 
   * Bumped up standards version. 
