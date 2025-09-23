@@ -1,16 +1,37 @@
-Description: Backported fix for a test failure
- This is to fix a segfault due to nullptr which appeared on Alpine + musl libc
- but also manifested in Debian during the initial packaging effort. This issue is
- fixed upstream in the latest version which is not released at the time of writing.
- This patch will not be required in v4.9.0+.
-Origin: upstream, https://github.com/ip4368/docker-watchman/commit/8fc47c90c34d112282debd5833e0cb20f07fe184#diff-3e8f02473d52888b44232c68b14a3d19
-Bug: https://github.com/facebook/watchman/issues/546
-Forwarded: not-needed
-Last-Update: 2019-10-04
+From: Wez Furlong <wez@fb.com>
+Date: Mon, 8 Jan 2018 21:57:43 -0800
+Subject: fix art.t test failure on alpine linux
 
---- watchman-4.9.0.orig/thirdparty/libart/src/art-inl.h
-+++ watchman-4.9.0/thirdparty/libart/src/art-inl.h
-@@ -760,7 +760,7 @@ art_tree<ValueType, KeyType>::Node::maxi
+Summary:
+Looks like we end up with root_ holding a nullptr after
+the associated test is finished.  This only seems to be a problem
+in practice on Alpine linux's musl libc based environment, and
+only when built with `-O2`.  Not sure if this is a c++ standard
+library implementation issue or a compiler optimization, or a
+combination of both of those things.
+
+Guard against that with a simple nullptr check.
+
+Refs https://github.com/facebook/watchman/issues/546
+
+Reviewed By: simpkins
+
+Differential Revision: D6681244
+
+fbshipit-source-id: f119b3552c0aeedc325fa83c71b12745536b1dac
+(cherry picked from commit e77eb9597c4c094a0b0bbeef0b957b49b40b87eb)
+
+Origin: upstream v2020.05.11.00
+Bug: https://github.com/facebook/watchman/issues/546
+---
+ thirdparty/libart/src/art-inl.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/thirdparty/libart/src/art-inl.h b/thirdparty/libart/src/art-inl.h
+index fce055b..acc7cd6 100644
+--- a/thirdparty/libart/src/art-inl.h
++++ b/thirdparty/libart/src/art-inl.h
+@@ -760,7 +760,7 @@ art_tree<ValueType, KeyType>::Node::maximum() const {
  template <typename ValueType, typename KeyType>
  typename art_tree<ValueType, KeyType>::Leaf*
  art_tree<ValueType, KeyType>::minimum() const {
@@ -19,7 +40,7 @@ Last-Update: 2019-10-04
  }
  
  /**
-@@ -769,7 +769,7 @@ art_tree<ValueType, KeyType>::minimum()
+@@ -769,7 +769,7 @@ art_tree<ValueType, KeyType>::minimum() const {
  template <typename ValueType, typename KeyType>
  typename art_tree<ValueType, KeyType>::Leaf*
  art_tree<ValueType, KeyType>::maximum() const {

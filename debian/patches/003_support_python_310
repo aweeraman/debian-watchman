@@ -1,6 +1,27 @@
-Description: Fix Python deprecation warnings about PY_SSIZE_T_CLEAN
-Origin: upstream, https://github.com/facebook/watchman/commit/6813a948fee72a15acf4120262d37c9c8dc3f16b
+From: Adam Simpkins <simpkins@fb.com>
+Date: Thu, 3 Dec 2020 10:55:51 -0800
+Subject: fix Python deprecation warnings about PY_SSIZE_T_CLEAN
 
+Summary:
+Update pywatchman/bser.c to define `PY_SSIZE_T_CLEAN` before including
+`Python.h` and then receive parsed string lenghts as `Py_ssize_t` rather than
+`int`.  This eliminates some runtime Python warnings about the old `int`
+behavior being deprecated.
+
+Reviewed By: chadaustin
+
+Differential Revision: D25294778
+
+fbshipit-source-id: 7db678ed918db3bf4745ba716585ed6475d1c910
+(cherry picked from commit 6813a948fee72a15acf4120262d37c9c8dc3f16b)
+
+Origin: upstream, v2020.12.07.00
+---
+ python/pywatchman/bser.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/python/pywatchman/bser.c b/python/pywatchman/bser.c
+index 59a2e75..8162800 100644
 --- a/python/pywatchman/bser.c
 +++ b/python/pywatchman/bser.c
 @@ -28,6 +28,7 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE

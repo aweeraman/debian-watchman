@@ -1,19 +1,29 @@
-Description: Support for python3
-Origin: upstream, https://github.com/facebook/watchman/issues/631#issuecomment-413076214
-Bug: https://github.com/facebook/watchman/issues/631
-Last-Update: 2019-10-04
+From: Eamonn Kent <ekent@fb.com>
+Date: Thu, 31 Aug 2017 15:23:42 -0700
+Subject: Have bin scripts use iter() method for python3
 
---- watchman-4.9.0.orig/python/bin/watchman-make
-+++ watchman-4.9.0/python/bin/watchman-make
-@@ -100,7 +100,7 @@ class DefineTarget(argparse.Action):
-             targets = []
-             setattr(namespace, self.dest, targets)
- 
--        if isinstance(values, basestring):
-+        if isinstance(values, str):
-             values = [values]
- 
-         if namespace.pattern is None or len(namespace.pattern) == 0:
+Summary:
+Iterable dict items should use iteritems in python 2 and items in python 3.
+The change was made in a way to not require any additional package
+dependencies.
+
+Reviewed By: wez
+
+Differential Revision: D5740400
+
+fbshipit-source-id: 65d543d88cb1b2a4dd17de8632c3723ae308f9a1
+(cherry picked from commit 17958f7da287e8d0f977693f4ef4f0973a17069b)
+
+Origin: upstream, v2020.05.11.00
+---
+ python/bin/watchman-make | 6 +++---
+ python/bin/watchman-wait | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/python/bin/watchman-make b/python/bin/watchman-make
+index ee52fde..8fc3329 100755
+--- a/python/bin/watchman-make
++++ b/python/bin/watchman-make
 @@ -209,7 +209,7 @@ while True:
          client.setTimeout(600)
  
@@ -41,8 +51,10 @@ Last-Update: 2019-10-04
              t.execute()
  
          # Print this at the bottom of the loop rather than the top
---- watchman-4.9.0.orig/python/bin/watchman-wait
-+++ watchman-4.9.0/python/bin/watchman-wait
+diff --git a/python/bin/watchman-wait b/python/bin/watchman-wait
+index f3d5026..9603b99 100755
+--- a/python/bin/watchman-wait
++++ b/python/bin/watchman-wait
 @@ -182,7 +182,7 @@ client = pywatchman.client()
  try:
      client.capabilityCheck(
@@ -52,7 +64,7 @@ Last-Update: 2019-10-04
          sub.start(client)
  
  except pywatchman.CommandError as ex:
-@@ -200,7 +200,7 @@ while deadline is None or time.time() <
+@@ -200,7 +200,7 @@ while deadline is None or time.time() < deadline:
          # the client object will accumulate all subscription results
          # over time, so we ask it to remove and return those values
          # for each of the subscriptions

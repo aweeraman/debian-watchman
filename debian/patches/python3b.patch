@@ -1,0 +1,47 @@
+From: Wez Furlong <wez@fb.com>
+Date: Wed, 15 Aug 2018 12:40:15 -0700
+Subject: fixup py2 vs py3 compat issue with watchman-make
+
+Summary:
+Copied and pasted our logic from WatchmanTestCase.py
+
+Fixes: https://github.com/facebook/watchman/issues/631
+
+Reviewed By: chadaustin
+
+Differential Revision: D9330044
+
+fbshipit-source-id: 3d19013d65fee640a6b209f6acc766e24d68c6b5
+(cherry picked from commit e48f0298e888817c6cc1ee27876b34358428de2a)
+
+Origin: upstream, v2020.05.11.00
+---
+ python/bin/watchman-make | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/python/bin/watchman-make b/python/bin/watchman-make
+index 8fc3329..9422850 100755
+--- a/python/bin/watchman-make
++++ b/python/bin/watchman-make
+@@ -7,6 +7,12 @@ import sys
+ import subprocess
+ 
+ 
++if pywatchman.compat.PYTHON3:
++    STRING_TYPES = (str, bytes)
++else:
++    STRING_TYPES = (str, unicode)  # noqa: F821
++
++
+ def patterns_to_terms(pats):
+     # convert a list of globs into the equivalent watchman expression term
+     if pats is None or len(pats) == 0:
+@@ -100,7 +106,7 @@ class DefineTarget(argparse.Action):
+             targets = []
+             setattr(namespace, self.dest, targets)
+ 
+-        if isinstance(values, basestring):
++        if isinstance(values, STRING_TYPES):
+             values = [values]
+ 
+         if namespace.pattern is None or len(namespace.pattern) == 0:

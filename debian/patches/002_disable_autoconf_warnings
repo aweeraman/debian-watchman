@@ -1,10 +1,18 @@
-Description: Fix FTBFS with autoconf 2.71
-  autogen.sh was incorrectly identifying pkg-config as
-  missing due to warnings of unused variables by autoconf.
-Author: Anuradha Weeraman <anuradha@debian.org>
-Forwarded: not-needed
-Last-Update: 2021-08-24
+From: Anuradha Weeraman <anuradha@debian.org>
+Date: Tue, 24 Aug 2021 20:11:28 +0530
+Subject: Fix FTBFS with autoconf 2.71
 
+autogen.sh was incorrectly identifying pkg-config as
+missing due to warnings of unused variables by autoconf.
+
+Forwarded: not-needed
+Comment: fixed differently upstream
+---
+ autogen.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/autogen.sh b/autogen.sh
+index a06ff30..9c98660 100755
 --- a/autogen.sh
 +++ b/autogen.sh
 @@ -21,7 +21,7 @@ automake --add-missing --foreign
