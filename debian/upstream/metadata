@@ -1,7 +1,6 @@
-{
-  "Archive": "GitHub",
-  "Bug-Database": "https://github.com/facebook/watchman/issues",
-  "Bug-Submit": "https://github.com/facebook/watchman/issues/new",
-  "Repository": "https://github.com/facebook/watchman.git",
-  "Repository-Browse": "https://github.com/facebook/watchman"
-}
+---
+Archive: GitHub
+Bug-Database: https://github.com/facebook/watchman/issues
+Bug-Submit: https://github.com/facebook/watchman/issues/new
+Repository-Browse: https://github.com/facebook/watchman
+Repository: https://github.com/facebook/watchman.git
