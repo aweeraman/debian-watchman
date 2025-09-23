@@ -1,3 +1,16 @@
+watchman (4.9.0-9) unstable; urgency=medium
+
+  * QA upload
+  * Cherry-pick patch to port from the old pcre to pcre2 (Closes: #999930)
+    (LP: #2103908)
+  * Update Build-Depends
+  * Update debian/upstream/metadata to use yaml format
+  * Remove debian/watch to use automatic uscan support instead
+  * Add minimal debian/gbp.conf
+  * Refresh patches
+
+ -- Jeremy Bícha <jbicha@ubuntu.com>  Tue, 23 Sep 2025 13:25:46 -0400
+
 watchman (4.9.0-8) unstable; urgency=medium
 
   * QA Upload
