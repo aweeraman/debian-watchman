@@ -1,0 +1,235 @@
+From: Xavier Deguillard <xavierd@fb.com>
+Date: Tue, 26 Jul 2022 13:51:58 -0700
+Subject: pcre: move to pcre2
+
+Summary:
+The pcre API is no longer maintained. According to pcre.org:
+
+. The older, but still widely deployed PCRE library, originally released in
+. 1997, is at version 8.45. This version of PCRE is now at end of life, and is no
+. longer being actively maintained. Version 8.45 is expected to be the final
+. release of the older PCRE library, and new projects should use PCRE2 instead.
+
+Let's thus migrate to pcre2.
+
+Reviewed By: chadaustin
+
+Differential Revision: D38134776
+
+fbshipit-source-id: 0d2eaeb84013cd03a7426fffa23afe9f48d57cdf
+
+Comment: ported to older watchman by Jeremy Bicha
+---
+ TARGETS           |  2 +-
+ configure.ac      | 18 +++++++--------
+ query/pcre.cpp    | 66 ++++++++++++++++++++++++++++++++-----------------------
+ watchman_system.h |  5 +++--
+ 4 files changed, 52 insertions(+), 39 deletions(-)
+
+diff --git a/TARGETS b/TARGETS
+index 5b3ddb3..4ec3d25 100644
+--- a/TARGETS
++++ b/TARGETS
+@@ -191,7 +191,7 @@ cpp_library(
+ cpp_library(
+     name = "pcre",
+     srcs = ["query/pcre.cpp"],
+-    compiler_flags = ["-DHAVE_PCRE_H"] + compiler_flags,
++    compiler_flags = ["-DHAVE_PCRE2_H"] + compiler_flags,
+     link_whole = True,
+     deps = [":headers"],
+     external_deps = ["pcre"],
+diff --git a/configure.ac b/configure.ac
+index 7e809a5..a57deb2 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -152,8 +152,8 @@ AM_CONDITIONAL(HAVE_RUBY, [test "x$want_ruby" = "xyes"])
+ 
+ AC_ARG_WITH(pcre, [
+   --without-pcre       Don't enable pcre support.
+-  --with-pcre=PATH     Enable pcre support.  PATH is location of pcre-config.
+-                       Default is to enable and look for pcre-config in your
++  --with-pcre=PATH     Enable pcre support.  PATH is location of pcre2-config.
++                       Default is to enable and look for pcre2-config in your
+                        $PATH
+ ],[
+   pcre_config="$withval"
+@@ -163,10 +163,10 @@ AC_ARG_WITH(pcre, [
+ 
+ if test "$pcre_config" != "no" ; then
+   if test "$pcre_config" = "yes" -o "$pcre_config" = "check"; then
+-    AC_PATH_PROG(PCRE_CONFIG_PATH, pcre-config, false)
++    AC_PATH_PROG(PCRE_CONFIG_PATH, pcre2-config, false)
+     dnl If --with-pcre was specified but pcre-config not found, fail hard now.
+     if test "$pcre_config" = "yes" -a "$PCRE_CONFIG_PATH" = "false"; then
+-      AC_MSG_FAILURE([--with-pcre was given, but pcre-config not found in PATH])
++      AC_MSG_FAILURE([--with-pcre was given, but pcre2-config not found in PATH])
+     fi
+   else
+     PCRE_CONFIG_PATH="$pcre_config"
+@@ -181,18 +181,18 @@ if test "$pcre_config" != "no" ; then
+   fi
+ 
+   if test -n "$pcre_version"; then
+-    PCRE_LIBS=`$PCRE_CONFIG_PATH --libs`
++    PCRE_LIBS=`$PCRE_CONFIG_PATH --libs8`
+     LIBS="$LIBS $PCRE_LIBS"
+     PCRE_CFLAGS=`$PCRE_CONFIG_PATH --cflags`
+     CFLAGS="$CFLAGS $PCRE_CFLAGS"
+     CPPFLAGS="$CPPFLAGS $PCRE_CFLAGS"
+-    AC_CHECK_HEADERS(pcre.h, [], [
++    AC_CHECK_HEADERS(pcre2.h, [], [
+       if test "$pcre_config" != "check"; then
+          AC_MSG_FAILURE([--with-pcre was given, but pcre not found:
+-  pcre-config --libs=$PCRE_LIBS
+-  pcre-config --cflags=$PCRE_CFLAGS])
++  pcre2-config --libs8=$PCRE_LIBS
++  pcre2-config --cflags=$PCRE_CFLAGS])
+       fi
+-    ])
++    ], [#define PCRE2_CODE_UNIT_WIDTH 8])
+   elif test "$pcre_config" != "check"; then
+     AC_MSG_FAILURE([$PCRE_CONFIG_PATH failed to run, could not check for PCRE])
+   fi
+diff --git a/query/pcre.cpp b/query/pcre.cpp
+index 60c201f..1329d3b 100644
+--- a/query/pcre.cpp
++++ b/query/pcre.cpp
+@@ -5,25 +5,25 @@
+ 
+ #include "make_unique.h"
+ 
+-#ifdef HAVE_PCRE_H
++#ifdef HAVE_PCRE2_H
+ 
+ using watchman::CaseSensitivity;
+ 
+ class PcreExpr : public QueryExpr {
+-  pcre *re;
+-  pcre_extra *extra;
++  pcre2_code *re;
++  pcre2_match_data* matchData;
+   bool wholename;
+ 
+  public:
+-  explicit PcreExpr(pcre* re, pcre_extra* extra, bool wholename)
+-      : re(re), extra(extra), wholename(wholename) {}
++  explicit PcreExpr(pcre2_code* re, pcre2_match_data* matchData, bool wholename)
++      : re(re), matchData(matchData), wholename(wholename) {}
+ 
+   ~PcreExpr() override {
+     if (re) {
+-      pcre_free(re);
++      pcre2_code_free(re);
+     }
+-    if (extra) {
+-      pcre_free(extra);
++    if (matchData) {
++      pcre2_match_data_free(matchData);
+     }
+   }
+ 
+@@ -37,16 +37,17 @@ class PcreExpr : public QueryExpr {
+       str = file->baseName();
+     }
+ 
+-    rc = pcre_exec(re, extra, str.data(), str.size(), 0, 0, nullptr, 0);
+-
+-    if (rc == PCRE_ERROR_NOMATCH) {
+-      return false;
+-    }
+-    if (rc >= 0) {
+-      return true;
+-    }
+-    // An error.  It's not actionable here
+-    return false;
++    rc = pcre2_match(
++        re,
++        reinterpret_cast<const unsigned char*>(str.data()),
++        str.size(),
++        0,
++        0,
++        matchData,
++        nullptr);
++    // Errors are either PCRE2_ERROR_NOMATCH or non actionable. Thus only match
++    // when we get a positive return value.
++    return rc >= 0;
+   }
+ 
+   static std::unique_ptr<QueryExpr>
+@@ -54,9 +55,7 @@ class PcreExpr : public QueryExpr {
+     const char *ignore, *pattern, *scope = "basename";
+     const char *which =
+         caseSensitive == CaseSensitivity::CaseInSensitive ? "ipcre" : "pcre";
+-    pcre* re;
+-    const char* errptr = nullptr;
+-    int erroff = 0;
++    size_t erroff = 0;
+     int errcode = 0;
+ 
+     if (json_unpack(term, "[s,s,s]", &ignore, &pattern, &scope) != 0 &&
+@@ -70,29 +69,42 @@ class PcreExpr : public QueryExpr {
+           "Invalid scope '", scope, "' for ", which, " expression"));
+     }
+ 
+-    re = pcre_compile2(
+-        pattern,
+-        caseSensitive == CaseSensitivity::CaseInSensitive ? PCRE_CASELESS : 0,
++    auto re = pcre2_compile(
++        reinterpret_cast<const unsigned char*>(pattern),
++        PCRE2_ZERO_TERMINATED,
++        caseSensitive == CaseSensitivity::CaseInSensitive ? PCRE2_CASELESS : 0,
+         &errcode,
+-        &errptr,
+         &erroff,
+         nullptr);
+     if (!re) {
++      // From PCRE2 documentation:
++      // https://www.pcre.org/current/doc/html/pcre2api.html#SEC32: "None of the
++      // messages are very long; a buffer size of 120 code units is ample"
++      PCRE2_UCHAR buffer[120];
++      static_assert(
++          sizeof(char) == sizeof(PCRE2_UCHAR),
++          "Watchman uses the 8-bit PCRE2 library");
++      pcre2_get_error_message(errcode, buffer, 120);
+       throw QueryParseError(watchman::to<std::string>(
+           "invalid ",
+           which,
+           ": code ",
+           errcode,
+           " ",
+-          errptr,
++          reinterpret_cast<const char*>(&buffer),
+           " at offset ",
+           erroff,
+           " in ",
+           pattern));
+     }
+ 
++    auto matchData = pcre2_match_data_create_from_pattern(re, nullptr);
++    if (!matchData) {
++      throw std::bad_alloc();
++    }
++
+     return watchman::make_unique<PcreExpr>(
+-        re, pcre_study(re, 0, &errptr), !strcmp(scope, "wholename"));
++        re, matchData, !strcmp(scope, "wholename"));
+   }
+   static std::unique_ptr<QueryExpr> parsePcre(
+       w_query* query,
+diff --git a/watchman_system.h b/watchman_system.h
+index 6235d01..baeb636 100644
+--- a/watchman_system.h
++++ b/watchman_system.h
+@@ -64,8 +64,9 @@
+ #include <poll.h>
+ #include <sys/wait.h>
+ #endif
+-#ifdef HAVE_PCRE_H
+-# include <pcre.h>
++#ifdef HAVE_PCRE2_H
++#define PCRE2_CODE_UNIT_WIDTH 8
++# include <pcre2.h>
+ #endif
+ #ifdef HAVE_EXECINFO_H
+ # include <execinfo.h>

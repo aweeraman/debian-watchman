@@ -3,3 +3,4 @@ python3a.patch
 python3b.patch
 002_disable_autoconf_warnings
 003_support_python_310
+pcre-move-to-pcre2.patch
